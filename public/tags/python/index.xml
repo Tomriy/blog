@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Python on Torimy的日常博客</title>
+    <link>http://localhost:1313/tags/python/</link>
+    <description>Recent content in Python on Torimy的日常博客</description>
+    <generator>Hugo</generator>
+    <language>en-zh</language>
+    <lastBuildDate>Tue, 19 May 2026 11:20:20 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>LangChain 学习之旅：从核心概念到实战应用</title>
+      <link>http://localhost:1313/langchain/learn01/</link>
+      <pubDate>Tue, 19 May 2026 11:20:20 +0800</pubDate>
+      <guid>http://localhost:1313/langchain/learn01/</guid>
+      <description>&lt;h2 id=&#34;引言&#34;&gt;引言&lt;/h2&gt;
+&lt;p&gt;大语言模型（LLM）的能力令人惊叹，但直接调用 API 往往难以构建复杂的、具备上下文感知和推理能力的应用。&lt;strong&gt;LangChain&lt;/strong&gt; 应运而生，它是一套专门为简化 LLM 应用开发而设计的框架，让你能像搭积木一样组合出强大的智能体。&lt;/p&gt;
+&lt;p&gt;本文将以&lt;strong&gt;新手友好&lt;/strong&gt;的视角，带你一步步理解 LangChain 的核心模块，并通过一个完整的问答机器人示例，完成从理论到实践的跨越。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;1-为什么是-langchain&#34;&gt;1. 为什么是 LangChain？&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;标准化接口&lt;/strong&gt;：统一了不同模型（OpenAI、Anthropic、本地模型）和向量数据库的调用方式。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;组件化设计&lt;/strong&gt;：将应用拆分为提示、链、记忆、检索等模块，职责清晰，易于复用。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;强大的编排能力&lt;/strong&gt;：通过 &lt;code&gt;Chain&lt;/code&gt; 和 &lt;code&gt;Agent&lt;/code&gt; 实现多步推理、工具调用，而不仅仅是单轮对话。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;生态丰富&lt;/strong&gt;：官方和社区提供了大量 &lt;code&gt;Tool&lt;/code&gt;、&lt;code&gt;Loader&lt;/code&gt;、&lt;code&gt;Retriever&lt;/code&gt; 集成，开箱即用。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;注意：2026 年 LangChain 已进入成熟期，推荐使用 &lt;code&gt;langchain-core&lt;/code&gt; 配合 &lt;code&gt;langchain-openai&lt;/code&gt; 等包，体验最新的 LCEL（LangChain 表达式语言）特性。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;2-核心组件速览&#34;&gt;2. 核心组件速览&lt;/h2&gt;
+&lt;p&gt;我们先用一张图理解 LangChain 的运转逻辑，然后逐一拆解。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;用户输入 → Prompt模板 → 语言模型 → 输出解析器 → 结果
+↑ ↓
+Memory(记忆) Retriever(检索)
+↑ ↓
+Agent(代理) ←→ Tools(工具)
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;21-模型-io与-llm-对话的翻译官&#34;&gt;2.1 模型 I/O：与 LLM 对话的“翻译官”&lt;/h3&gt;
+&lt;p&gt;这是最基础的模块，包含三个要素：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;提示模板（Prompt Template）&lt;/strong&gt;：将动态变量插入到预设的提示中。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;语言模型（Language Model）&lt;/strong&gt;：统一调用各类 LLM。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;输出解析器（Output Parser）&lt;/strong&gt;：将模型返回的非结构化文本变成程序可读的格式（如 JSON）。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;示例：&lt;/strong&gt;&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

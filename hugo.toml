@@ -1,0 +1,4 @@
+baseURL = 'https://torimy.github.io/'
+locale = 'en-zh'
+title = 'Torimy的日常博客'
+theme = 'PaperMod'
