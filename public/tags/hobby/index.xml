@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hobby on Torimy的日常博客</title>
+    <link>http://localhost:1313/tags/hobby/</link>
+    <description>Recent content in Hobby on Torimy的日常博客</description>
+    <generator>Hugo</generator>
+    <language>zh-CN&#34;</language>
+    <lastBuildDate>Tue, 19 May 2026 11:20:20 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/hobby/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>这块应该干点什么呢</title>
+      <link>http://localhost:1313/hobby/hobby/</link>
+      <pubDate>Tue, 19 May 2026 11:20:20 +0800</pubDate>
+      <guid>http://localhost:1313/hobby/hobby/</guid>
+      <description>&lt;h2 id=&#34;这块应该写点什么呢&#34;&gt;&#xA;  这块应该写点什么呢&#xA;  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%bf%99%e5%9d%97%e5%ba%94%e8%af%a5%e5%86%99%e7%82%b9%e4%bb%80%e4%b9%88%e5%91%a2&#34;&gt;&#xA;    &lt;i class=&#34;fa-solid fa-link&#34; aria-hidden=&#34;true&#34; title=&#34;Link to heading&#34;&gt;&lt;/i&gt;&#xA;    &lt;span class=&#34;sr-only&#34;&gt;Link to heading&lt;/span&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;</description>
+    </item>
+  </channel>
+</rss>

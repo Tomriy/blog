@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>日常 on Torimy的日常博客</title>
+    <link>http://localhost:1313/tags/%E6%97%A5%E5%B8%B8/</link>
+    <description>Recent content in 日常 on Torimy的日常博客</description>
+    <generator>Hugo</generator>
+    <language>zh-CN&#34;</language>
+    <lastBuildDate>Tue, 19 May 2026 11:20:20 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/%E6%97%A5%E5%B8%B8/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>日常笔记</title>
+      <link>http://localhost:1313/daily/daily/</link>
+      <pubDate>Tue, 19 May 2026 11:20:20 +0800</pubDate>
+      <guid>http://localhost:1313/daily/daily/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

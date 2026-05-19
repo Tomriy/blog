@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Dailies on Torimy的日常博客</title>
+    <link>http://localhost:1313/daily/</link>
+    <description>Recent content in Dailies on Torimy的日常博客</description>
+    <generator>Hugo</generator>
+    <language>zh-CN&#34;</language>
+    <lastBuildDate>Tue, 19 May 2026 11:20:20 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/daily/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>日常笔记</title>
+      <link>http://localhost:1313/daily/daily/</link>
+      <pubDate>Tue, 19 May 2026 11:20:20 +0800</pubDate>
+      <guid>http://localhost:1313/daily/daily/</guid>
+      <description>&lt;hr&gt;&#xA;&lt;h2 id=&#34;这块还需要待定&#34;&gt;&#xA;  这块还需要待定&#xA;  &lt;a class=&#34;heading-link&#34; href=&#34;#%e8%bf%99%e5%9d%97%e8%bf%98%e9%9c%80%e8%a6%81%e5%be%85%e5%ae%9a&#34;&gt;&#xA;    &lt;i class=&#34;fa-solid fa-link&#34; aria-hidden=&#34;true&#34; title=&#34;Link to heading&#34;&gt;&lt;/i&gt;&#xA;    &lt;span class=&#34;sr-only&#34;&gt;Link to heading&lt;/span&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;</description>
+    </item>
+  </channel>
+</rss>

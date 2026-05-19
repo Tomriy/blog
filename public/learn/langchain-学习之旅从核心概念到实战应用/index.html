@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <title>
+  LangChain 学习之旅：从核心概念到实战应用 · Torimy的日常博客
+</title>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+
+
+
+
+<meta name="author" content="Torimy">
+<meta name="description" content="
+  引言
+  
+    
+    Link to heading
+  
+
+大语言模型（LLM）的能力令人惊叹，但直接调用 API 往往难以构建复杂的、具备上下文感知和推理能力的应用。LangChain 应运而生，它是一套专门为简化 LLM 应用开发而设计的框架，让你能像搭积木一样组合出强大的智能体。
+本文将以新手友好的视角，带你一步步理解 LangChain 的核心模块，并通过一个完整的问答机器人示例，完成从理论到实践的跨越。
+
+
+  1. 为什么是 LangChain？
+  
+    
+    Link to heading
+  
+
+
+标准化接口：统一了不同模型（OpenAI、Anthropic、本地模型）和向量数据库的调用方式。
+组件化设计：将应用拆分为提示、链、记忆、检索等模块，职责清晰，易于复用。
+强大的编排能力：通过 Chain 和 Agent 实现多步推理、工具调用，而不仅仅是单轮对话。
+生态丰富：官方和社区提供了大量 Tool、Loader、Retriever 集成，开箱即用。
+
+
+注意：2026 年 LangChain 已进入成熟期，推荐使用 langchain-core 配合 langchain-openai 等包，体验最新的 LCEL（LangChain 表达式语言）特性。
+
+
+
+  2. 核心组件速览
+  
+    
+    Link to heading
+  
+
+我们先用一张图理解 LangChain 的运转逻辑，然后逐一拆解。
+用户输入 → Prompt模板 → 语言模型 → 输出解析器 → 结果
+↑ ↓
+Memory(记忆) Retriever(检索)
+↑ ↓
+Agent(代理) ←→ Tools(工具)
+
+  2.1 模型 I/O：与 LLM 对话的“翻译官”
+  
+    
+    Link to heading
+  
+
+这是最基础的模块，包含三个要素：">
+<meta name="keywords" content="博客,开发者,个人">
+
+
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="LangChain 学习之旅：从核心概念到实战应用">
+  <meta name="twitter:description" content="引言 Link to heading 大语言模型（LLM）的能力令人惊叹，但直接调用 API 往往难以构建复杂的、具备上下文感知和推理能力的应用。LangChain 应运而生，它是一套专门为简化 LLM 应用开发而设计的框架，让你能像搭积木一样组合出强大的智能体。
+本文将以新手友好的视角，带你一步步理解 LangChain 的核心模块，并通过一个完整的问答机器人示例，完成从理论到实践的跨越。
+1. 为什么是 LangChain？ Link to heading 标准化接口：统一了不同模型（OpenAI、Anthropic、本地模型）和向量数据库的调用方式。 组件化设计：将应用拆分为提示、链、记忆、检索等模块，职责清晰，易于复用。 强大的编排能力：通过 Chain 和 Agent 实现多步推理、工具调用，而不仅仅是单轮对话。 生态丰富：官方和社区提供了大量 Tool、Loader、Retriever 集成，开箱即用。 注意：2026 年 LangChain 已进入成熟期，推荐使用 langchain-core 配合 langchain-openai 等包，体验最新的 LCEL（LangChain 表达式语言）特性。
+2. 核心组件速览 Link to heading 我们先用一张图理解 LangChain 的运转逻辑，然后逐一拆解。
+用户输入 → Prompt模板 → 语言模型 → 输出解析器 → 结果 ↑ ↓ Memory(记忆) Retriever(检索) ↑ ↓ Agent(代理) ←→ Tools(工具) 2.1 模型 I/O：与 LLM 对话的“翻译官” Link to heading 这是最基础的模块，包含三个要素：">
+
+<meta property="og:url" content="http://localhost:1313/learn/langchain-%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%85%E4%BB%8E%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E5%88%B0%E5%AE%9E%E6%88%98%E5%BA%94%E7%94%A8/">
+  <meta property="og:site_name" content="Torimy的日常博客">
+  <meta property="og:title" content="LangChain 学习之旅：从核心概念到实战应用">
+  <meta property="og:description" content="引言 Link to heading 大语言模型（LLM）的能力令人惊叹，但直接调用 API 往往难以构建复杂的、具备上下文感知和推理能力的应用。LangChain 应运而生，它是一套专门为简化 LLM 应用开发而设计的框架，让你能像搭积木一样组合出强大的智能体。
+本文将以新手友好的视角，带你一步步理解 LangChain 的核心模块，并通过一个完整的问答机器人示例，完成从理论到实践的跨越。
+1. 为什么是 LangChain？ Link to heading 标准化接口：统一了不同模型（OpenAI、Anthropic、本地模型）和向量数据库的调用方式。 组件化设计：将应用拆分为提示、链、记忆、检索等模块，职责清晰，易于复用。 强大的编排能力：通过 Chain 和 Agent 实现多步推理、工具调用，而不仅仅是单轮对话。 生态丰富：官方和社区提供了大量 Tool、Loader、Retriever 集成，开箱即用。 注意：2026 年 LangChain 已进入成熟期，推荐使用 langchain-core 配合 langchain-openai 等包，体验最新的 LCEL（LangChain 表达式语言）特性。
+2. 核心组件速览 Link to heading 我们先用一张图理解 LangChain 的运转逻辑，然后逐一拆解。
+用户输入 → Prompt模板 → 语言模型 → 输出解析器 → 结果 ↑ ↓ Memory(记忆) Retriever(检索) ↑ ↓ Agent(代理) ←→ Tools(工具) 2.1 模型 I/O：与 LLM 对话的“翻译官” Link to heading 这是最基础的模块，包含三个要素：">
+  <meta property="og:locale" content="zh_CN&#34;">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="learn">
+    <meta property="article:published_time" content="2026-05-19T11:20:20+08:00">
+    <meta property="article:modified_time" content="2026-05-19T11:20:20+08:00">
+    <meta property="article:tag" content="LangChain">
+    <meta property="article:tag" content="LLM">
+    <meta property="article:tag" content="Python">
+    <meta property="article:tag" content="AI">
+    <meta property="article:tag" content="教程">
+
+
+
+
+<link rel="canonical" href="http://localhost:1313/learn/langchain-%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%85%E4%BB%8E%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E5%88%B0%E5%AE%9E%E6%88%98%E5%BA%94%E7%94%A8/">
+
+
+<link rel="preload" href="/fonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
+
+
+  
+  
+  <link rel="stylesheet" href="/css/coder.css" media="screen">
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+<link rel="icon" type="image/svg+xml" href="/images/favicon.svg" sizes="any">
+<link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/images/favicon-16x16.png" sizes="16x16">
+
+<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+
+
+
+</head>
+
+
+
+
+<body class="preload-transitions colorscheme-light">
+  
+<div class="float-container">
+    <a id="dark-mode-toggle" class="colorscheme-toggle">
+        <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+    </a>
+</div>
+
+
+  <main class="wrapper">
+    <nav class="navigation">
+  <section class="container">
+    
+    <a class="navigation-title" href="http://localhost:1313/">
+      Torimy的日常博客
+    </a>
+    
+    
+      <input type="checkbox" id="menu-toggle" />
+      <label class="menu-button float-right" for="menu-toggle">
+        <i class="fa-solid fa-bars fa-fw" aria-hidden="true"></i>
+      </label>
+      <ul class="navigation-list">
+        
+          
+            <li class="navigation-item">
+              <a class="navigation-link " href="/langchain">博客</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link " href="/daily">日常</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link " href="/hobby">兴趣</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link " href="/work">工作</a>
+            </li>
+          
+        
+        
+      </ul>
+    
+  </section>
+</nav>
+
+
+    <div class="content">
+      
+  <section class="container page">
+  <article>
+    <header>
+      <h1 class="title">
+        <a class="title-link" href="http://localhost:1313/learn/langchain-%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%85%E4%BB%8E%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E5%88%B0%E5%AE%9E%E6%88%98%E5%BA%94%E7%94%A8/">
+          LangChain 学习之旅：从核心概念到实战应用
+        </a>
+      </h1>
+    </header>
+
+    <h2 id="引言">
+  引言
+  <a class="heading-link" href="#%e5%bc%95%e8%a8%80">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
+<p>大语言模型（LLM）的能力令人惊叹，但直接调用 API 往往难以构建复杂的、具备上下文感知和推理能力的应用。<strong>LangChain</strong> 应运而生，它是一套专门为简化 LLM 应用开发而设计的框架，让你能像搭积木一样组合出强大的智能体。</p>
+<p>本文将以<strong>新手友好</strong>的视角，带你一步步理解 LangChain 的核心模块，并通过一个完整的问答机器人示例，完成从理论到实践的跨越。</p>
+<hr>
+<h2 id="1-为什么是-langchain">
+  1. 为什么是 LangChain？
+  <a class="heading-link" href="#1-%e4%b8%ba%e4%bb%80%e4%b9%88%e6%98%af-langchain">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
+<ul>
+<li><strong>标准化接口</strong>：统一了不同模型（OpenAI、Anthropic、本地模型）和向量数据库的调用方式。</li>
+<li><strong>组件化设计</strong>：将应用拆分为提示、链、记忆、检索等模块，职责清晰，易于复用。</li>
+<li><strong>强大的编排能力</strong>：通过 <code>Chain</code> 和 <code>Agent</code> 实现多步推理、工具调用，而不仅仅是单轮对话。</li>
+<li><strong>生态丰富</strong>：官方和社区提供了大量 <code>Tool</code>、<code>Loader</code>、<code>Retriever</code> 集成，开箱即用。</li>
+</ul>
+<blockquote>
+<p>注意：2026 年 LangChain 已进入成熟期，推荐使用 <code>langchain-core</code> 配合 <code>langchain-openai</code> 等包，体验最新的 LCEL（LangChain 表达式语言）特性。</p>
+</blockquote>
+<hr>
+<h2 id="2-核心组件速览">
+  2. 核心组件速览
+  <a class="heading-link" href="#2-%e6%a0%b8%e5%bf%83%e7%bb%84%e4%bb%b6%e9%80%9f%e8%a7%88">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
+<p>我们先用一张图理解 LangChain 的运转逻辑，然后逐一拆解。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>用户输入 → Prompt模板 → 语言模型 → 输出解析器 → 结果
+</span></span><span style="display:flex;"><span>↑ ↓
+</span></span><span style="display:flex;"><span>Memory(记忆) Retriever(检索)
+</span></span><span style="display:flex;"><span>↑ ↓
+</span></span><span style="display:flex;"><span>Agent(代理) ←→ Tools(工具)
+</span></span></code></pre></div><h3 id="21-模型-io与-llm-对话的翻译官">
+  2.1 模型 I/O：与 LLM 对话的“翻译官”
+  <a class="heading-link" href="#21-%e6%a8%a1%e5%9e%8b-io%e4%b8%8e-llm-%e5%af%b9%e8%af%9d%e7%9a%84%e7%bf%bb%e8%af%91%e5%ae%98">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<p>这是最基础的模块，包含三个要素：</p>
+<ol>
+<li><strong>提示模板（Prompt Template）</strong>：将动态变量插入到预设的提示中。</li>
+<li><strong>语言模型（Language Model）</strong>：统一调用各类 LLM。</li>
+<li><strong>输出解析器（Output Parser）</strong>：将模型返回的非结构化文本变成程序可读的格式（如 JSON）。</li>
+</ol>
+<p><strong>示例：</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> langchain_core.prompts <span style="color:#f92672">import</span> ChatPromptTemplate
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> langchain_openai <span style="color:#f92672">import</span> ChatOpenAI
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> langchain_core.output_parsers <span style="color:#f92672">import</span> StrOutputParser
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 1. 提示模板</span>
+</span></span><span style="display:flex;"><span>prompt <span style="color:#f92672">=</span> ChatPromptTemplate<span style="color:#f92672">.</span>from_messages([
+</span></span><span style="display:flex;"><span>    (<span style="color:#e6db74">&#34;system&#34;</span>, <span style="color:#e6db74">&#34;你是一个擅长讲冷笑话的助手&#34;</span>),
+</span></span><span style="display:flex;"><span>    (<span style="color:#e6db74">&#34;user&#34;</span>, <span style="color:#e6db74">&#34;讲一个关于</span><span style="color:#e6db74">{topic}</span><span style="color:#e6db74">的笑话&#34;</span>)
+</span></span><span style="display:flex;"><span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 2. 模型</span>
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> ChatOpenAI(model<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gpt-4o&#34;</span>, temperature<span style="color:#f92672">=</span><span style="color:#ae81ff">0.8</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 3. 输出解析器</span>
+</span></span><span style="display:flex;"><span>parser <span style="color:#f92672">=</span> StrOutputParser()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 将它们串联</span>
+</span></span><span style="display:flex;"><span>chain <span style="color:#f92672">=</span> prompt <span style="color:#f92672">|</span> model <span style="color:#f92672">|</span> parser
+</span></span><span style="display:flex;"><span>print(chain<span style="color:#f92672">.</span>invoke({<span style="color:#e6db74">&#34;topic&#34;</span>: <span style="color:#e6db74">&#34;程序员&#34;</span>}))
+</span></span></code></pre></div><h3 id="22-检索增强生成rag让-llm-拥有外脑">
+  2.2 检索增强生成（RAG）：让 LLM 拥有“外脑”
+  <a class="heading-link" href="#22-%e6%a3%80%e7%b4%a2%e5%a2%9e%e5%bc%ba%e7%94%9f%e6%88%90rag%e8%ae%a9-llm-%e6%8b%a5%e6%9c%89%e5%a4%96%e8%84%91">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<p>LLM 的训练数据是静态的，想让模型基于最新文档或私有知识回答，就需要 RAG 流水线。</p>
+<p>典型流程：加载文档 → 文本切割 → 向量化 → 存入向量数据库 → 检索相关内容 → 注入提示。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> langchain_community.document_loaders <span style="color:#f92672">import</span> TextLoader
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> langchain_text_splitters <span style="color:#f92672">import</span> RecursiveCharacterTextSplitter
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> langchain_openai <span style="color:#f92672">import</span> OpenAIEmbeddings
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> langchain_community.vectorstores <span style="color:#f92672">import</span> Chroma
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 加载与切割</span>
+</span></span><span style="display:flex;"><span>loader <span style="color:#f92672">=</span> TextLoader(<span style="color:#e6db74">&#34;./knowledge.txt&#34;</span>)
+</span></span><span style="display:flex;"><span>docs <span style="color:#f92672">=</span> loader<span style="color:#f92672">.</span>load()
+</span></span><span style="display:flex;"><span>text_splitter <span style="color:#f92672">=</span> RecursiveCharacterTextSplitter(chunk_size<span style="color:#f92672">=</span><span style="color:#ae81ff">500</span>, chunk_overlap<span style="color:#f92672">=</span><span style="color:#ae81ff">50</span>)
+</span></span><span style="display:flex;"><span>splits <span style="color:#f92672">=</span> text_splitter<span style="color:#f92672">.</span>split_documents(docs)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 向量化并存入 Chroma</span>
+</span></span><span style="display:flex;"><span>vectorstore <span style="color:#f92672">=</span> Chroma<span style="color:#f92672">.</span>from_documents(
+</span></span><span style="display:flex;"><span>    documents<span style="color:#f92672">=</span>splits,
+</span></span><span style="display:flex;"><span>    embedding<span style="color:#f92672">=</span>OpenAIEmbeddings()
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 构建检索器</span>
+</span></span><span style="display:flex;"><span>retriever <span style="color:#f92672">=</span> vectorstore<span style="color:#f92672">.</span>as_retriever()
+</span></span></code></pre></div><p>将检索器接入链：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> langchain_core.runnables <span style="color:#f92672">import</span> RunnablePassthrough
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">format_docs</span>(docs):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n\n</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">.</span>join(doc<span style="color:#f92672">.</span>page_content <span style="color:#66d9ef">for</span> doc <span style="color:#f92672">in</span> docs)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>rag_chain <span style="color:#f92672">=</span> (
+</span></span><span style="display:flex;"><span>    {<span style="color:#e6db74">&#34;context&#34;</span>: retriever <span style="color:#f92672">|</span> format_docs, <span style="color:#e6db74">&#34;question&#34;</span>: RunnablePassthrough()}
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">|</span> prompt
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">|</span> model
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">|</span> parser
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>answer <span style="color:#f92672">=</span> rag_chain<span style="color:#f92672">.</span>invoke(<span style="color:#e6db74">&#34;What did the author say about...&#34;</span>)
+</span></span></code></pre></div><h3 id="23-链与记忆不止于单次对话">
+  2.3 链与记忆：不止于单次对话
+  <a class="heading-link" href="#23-%e9%93%be%e4%b8%8e%e8%ae%b0%e5%bf%86%e4%b8%8d%e6%ad%a2%e4%ba%8e%e5%8d%95%e6%ac%a1%e5%af%b9%e8%af%9d">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<p><strong>Chain</strong> 将多个步骤串联成工作流。早期有 <code>LLMChain</code>，现在更推荐使用 <strong>LCEL</strong> (| 管道) 构建，它天然支持流式、异步和并行。</p>
+<p><strong>Memory</strong> 负责在多次交互中保持状态。现代 LangChain 应用中，我们通常使用 <code>RunnableWithMessageHistory</code> 包装链，把历史消息存入外部存储</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> langchain_community.chat_message_histories <span style="color:#f92672">import</span> ChatMessageHistory
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> langchain_core.runnables.history <span style="color:#f92672">import</span> RunnableWithMessageHistory
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>store <span style="color:#f92672">=</span> {}  <span style="color:#75715e"># 实际项目中可换为 Redis</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_session_history</span>(session_id: str):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> session_id <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> store:
+</span></span><span style="display:flex;"><span>        store[session_id] <span style="color:#f92672">=</span> ChatMessageHistory()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> store[session_id]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>with_history_chain <span style="color:#f92672">=</span> RunnableWithMessageHistory(
+</span></span><span style="display:flex;"><span>    chain,
+</span></span><span style="display:flex;"><span>    get_session_history,
+</span></span><span style="display:flex;"><span>    input_messages_key<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;question&#34;</span>,
+</span></span><span style="display:flex;"><span>    history_messages_key<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;history&#34;</span>,
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 第一次对话</span>
+</span></span><span style="display:flex;"><span>response1 <span style="color:#f92672">=</span> with_history_chain<span style="color:#f92672">.</span>invoke(
+</span></span><span style="display:flex;"><span>    {<span style="color:#e6db74">&#34;question&#34;</span>: <span style="color:#e6db74">&#34;我叫小明&#34;</span>},
+</span></span><span style="display:flex;"><span>    config<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;configurable&#34;</span>: {<span style="color:#e6db74">&#34;session_id&#34;</span>: <span style="color:#e6db74">&#34;user123&#34;</span>}}
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 第二次对话，模型能记住名字</span>
+</span></span><span style="display:flex;"><span>response2 <span style="color:#f92672">=</span> with_history_chain<span style="color:#f92672">.</span>invoke(
+</span></span><span style="display:flex;"><span>    {<span style="color:#e6db74">&#34;question&#34;</span>: <span style="color:#e6db74">&#34;我叫什么名字？&#34;</span>},
+</span></span><span style="display:flex;"><span>    config<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;configurable&#34;</span>: {<span style="color:#e6db74">&#34;session_id&#34;</span>: <span style="color:#e6db74">&#34;user123&#34;</span>}}
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><h3 id="24-代理agent与工具让模型学会使用手脚">
+  2.4 代理（Agent）与工具：让模型学会使用“手脚”
+  <a class="heading-link" href="#24-%e4%bb%a3%e7%90%86agent%e4%b8%8e%e5%b7%a5%e5%85%b7%e8%ae%a9%e6%a8%a1%e5%9e%8b%e5%ad%a6%e4%bc%9a%e4%bd%bf%e7%94%a8%e6%89%8b%e8%84%9a">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
+<p>当你需要模型<strong>自主决策调用何种工具</strong>（搜索、计算器、查询数据库）时，Agent 就登场了。</p>
+<p><strong>Tools</strong>：封装了具体功能的接口（如 <code>tool</code> 装饰器）。</p>
+<p><strong>Agent</strong>：根据 LLM 的推理，选择工具并观察结果，直到得出最终答案。</p>
+<p>现代写法推荐使用 <code>create_react_agent</code>：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> langchain.agents <span style="color:#f92672">import</span> create_react_agent
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> langchain_community.tools.tavily_search <span style="color:#f92672">import</span> TavilySearchResults
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>tools <span style="color:#f92672">=</span> [TavilySearchResults(max_results<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)]
+</span></span><span style="display:flex;"><span>agent <span style="color:#f92672">=</span> create_react_agent(model, tools)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>result <span style="color:#f92672">=</span> agent<span style="color:#f92672">.</span>invoke({<span style="color:#e6db74">&#34;messages&#34;</span>: [(<span style="color:#e6db74">&#34;user&#34;</span>, <span style="color:#e6db74">&#34;2026年温网男单冠军是谁？&#34;</span>)]})
+</span></span></code></pre></div><h2 id="3-实战构建一个可对话的知识库助手">
+  3. 实战：构建一个可对话的知识库助手
+  <a class="heading-link" href="#3-%e5%ae%9e%e6%88%98%e6%9e%84%e5%bb%ba%e4%b8%80%e4%b8%aa%e5%8f%af%e5%af%b9%e8%af%9d%e7%9a%84%e7%9f%a5%e8%af%86%e5%ba%93%e5%8a%a9%e6%89%8b">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
+<p>结合 RAG、记忆和 Streaming，打造一个完整的问答应用。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> streamlit <span style="color:#66d9ef">as</span> st
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> langchain_openai <span style="color:#f92672">import</span> ChatOpenAI, OpenAIEmbeddings
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> langchain_community.vectorstores <span style="color:#f92672">import</span> Chroma
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> langchain_core.prompts <span style="color:#f92672">import</span> ChatPromptTemplate
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> langchain_core.runnables <span style="color:#f92672">import</span> RunnablePassthrough
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> langchain_core.output_parsers <span style="color:#f92672">import</span> StrOutputParser
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> langchain_community.chat_message_histories <span style="color:#f92672">import</span> StreamlitChatMessageHistory
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> langchain_core.runnables.history <span style="color:#f92672">import</span> RunnableWithMessageHistory
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ---- 初始化向量存储（仅首次） ----</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#34;vectorstore&#34;</span> <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> st<span style="color:#f92672">.</span>session_state:
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 假设已有文档加载并切割</span>
+</span></span><span style="display:flex;"><span>    st<span style="color:#f92672">.</span>session_state<span style="color:#f92672">.</span>vectorstore <span style="color:#f92672">=</span> Chroma(
+</span></span><span style="display:flex;"><span>        embedding_function<span style="color:#f92672">=</span>OpenAIEmbeddings(),
+</span></span><span style="display:flex;"><span>        persist_directory<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;./chroma_db&#34;</span>
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ---- 构建链 ----</span>
+</span></span><span style="display:flex;"><span>system_prompt <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;&#34;你是智能助手，基于以下上下文回答问题。如果不知道，就说不知道，不要编造。
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">上下文：</span><span style="color:#e6db74">{context}</span><span style="color:#e6db74">&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>prompt <span style="color:#f92672">=</span> ChatPromptTemplate<span style="color:#f92672">.</span>from_messages([
+</span></span><span style="display:flex;"><span>    (<span style="color:#e6db74">&#34;system&#34;</span>, system_prompt),
+</span></span><span style="display:flex;"><span>    (<span style="color:#e6db74">&#34;human&#34;</span>, <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{question}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>retriever <span style="color:#f92672">=</span> st<span style="color:#f92672">.</span>session_state<span style="color:#f92672">.</span>vectorstore<span style="color:#f92672">.</span>as_retriever()
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> ChatOpenAI(model<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gpt-4o&#34;</span>, streaming<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>rag_chain <span style="color:#f92672">=</span> (
+</span></span><span style="display:flex;"><span>    {<span style="color:#e6db74">&#34;context&#34;</span>: retriever <span style="color:#f92672">|</span> (<span style="color:#66d9ef">lambda</span> docs: <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n\n</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">.</span>join(d<span style="color:#f92672">.</span>page_content <span style="color:#66d9ef">for</span> d <span style="color:#f92672">in</span> docs)),
+</span></span><span style="display:flex;"><span>     <span style="color:#e6db74">&#34;question&#34;</span>: RunnablePassthrough()}
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">|</span> prompt
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">|</span> model
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">|</span> StrOutputParser()
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ---- 添加对话记忆 ----</span>
+</span></span><span style="display:flex;"><span>msgs <span style="color:#f92672">=</span> StreamlitChatMessageHistory(key<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;langchain_messages&#34;</span>)
+</span></span><span style="display:flex;"><span>chain_with_history <span style="color:#f92672">=</span> RunnableWithMessageHistory(
+</span></span><span style="display:flex;"><span>    rag_chain,
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">lambda</span> session_id: msgs,
+</span></span><span style="display:flex;"><span>    input_messages_key<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;question&#34;</span>,
+</span></span><span style="display:flex;"><span>    history_messages_key<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;history&#34;</span>,
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ---- Streamlit 界面 ----</span>
+</span></span><span style="display:flex;"><span>st<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#34;📚 知识库问答助手&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> msg <span style="color:#f92672">in</span> msgs<span style="color:#f92672">.</span>messages:
+</span></span><span style="display:flex;"><span>    st<span style="color:#f92672">.</span>chat_message(msg<span style="color:#f92672">.</span>type)<span style="color:#f92672">.</span>write(msg<span style="color:#f92672">.</span>content)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> question <span style="color:#f92672">:=</span> st<span style="color:#f92672">.</span>chat_input(<span style="color:#e6db74">&#34;请输入你的问题&#34;</span>):
+</span></span><span style="display:flex;"><span>    st<span style="color:#f92672">.</span>chat_message(<span style="color:#e6db74">&#34;human&#34;</span>)<span style="color:#f92672">.</span>write(question)
+</span></span><span style="display:flex;"><span>    config <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#34;configurable&#34;</span>: {<span style="color:#e6db74">&#34;session_id&#34;</span>: <span style="color:#e6db74">&#34;any&#34;</span>}}
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> st<span style="color:#f92672">.</span>chat_message(<span style="color:#e6db74">&#34;ai&#34;</span>):
+</span></span><span style="display:flex;"><span>        response <span style="color:#f92672">=</span> st<span style="color:#f92672">.</span>write_stream(
+</span></span><span style="display:flex;"><span>            chain_with_history<span style="color:#f92672">.</span>stream({<span style="color:#e6db74">&#34;question&#34;</span>: question}, config)
+</span></span><span style="display:flex;"><span>        )
+</span></span></code></pre></div><p>这短短几十行代码就实现了一个拥有长记忆、基于私有知识、且流式输出的对话界面。</p>
+<h2 id="4-学习建议与最佳实践">
+  4. 学习建议与最佳实践
+  <a class="heading-link" href="#4-%e5%ad%a6%e4%b9%a0%e5%bb%ba%e8%ae%ae%e4%b8%8e%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
+<p>1、<strong>从 LCEL 入手</strong>：抛弃旧的 LLMChain，| 管道语法可读性强，且便于调试和组合。</p>
+<p>2、<strong>善用 LangSmith</strong>：官方提供的调试平台，可以可视化每一步的输入输出，迅速定位问题。</p>
+<p>3、<strong>理解 Runnable 协议</strong>：所有组件都是 Runnable，支持 invoke、stream、batch，掌握它就能轻松切换同步/异步。</p>
+<p>4、<strong>拆分独立组件</strong>：不要写一个巨大的链，而是将检索、格式化、回答拆成独立 Runnable，便于测试和复用。</p>
+<p>5、<strong>控制 Token 消耗</strong>：合理设置 chunk_size，使用 trim_messages 辅助函数管理历史长度。</p>
+<p>6、<strong>关注官方 Cookbook</strong>：https://python.langchain.com/ 上有大量最新示例。</p>
+<h2 id="5-结语">
+  5. 结语
+  <a class="heading-link" href="#5-%e7%bb%93%e8%af%ad">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
+<p>LangChain 为 LLM 应用开发提供了一套强大的抽象，它的真正价值在于让你<strong>专注于业务逻辑而非底层胶水代码</strong>。记住：框架只是工具，关键在于你对问题域的拆解和提示词的设计。</p>
+<p>建议你今天就从一个小项目开始——也许是自己的个人知识库、也许是自动化邮件助手——亲自动手感受 LangChain 的威力。</p>
+
+  </article>
+</section>
+
+  
+
+    </div>
+
+    <footer class="footer">
+  <section class="container">
+    ©
+    
+    2026
+     Torimy 
+    ·
+    
+    Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/" target="_blank" rel="noopener">Coder</a>.
+    
+  </section>
+</footer>
+
+  </main>
+
+  
+
+  
+  
+  <script src="/js/coder.js"></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</body>
+
+</html>

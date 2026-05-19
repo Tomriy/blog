@@ -1,4 +1,43 @@
-baseURL = 'https://torimy.github.io/'
-locale = 'en-zh'
+baseURL = 'https://torimy.github.com/'
+locale = 'zh-CN"'
 title = 'Torimy的日常博客'
-theme = 'hugo-coder'
+theme = 'coder'
+enableEmoji = true
+
+# 分页设置
+paginate = 20
+
+# 代码高亮设置
+pygmentsStyle = "monokai"
+pygmentsCodeFences = true
+pygmentsCodeFencesGuessSyntax = true
+
+# 主题特定参数
+[params]
+  author = "Torimy"            # 作者名称
+  info = "Java开发"        # 简介，如 "全栈开发者"
+  description = "分享一些日常"     # 站点描述，用于SEO
+  keywords = "博客,开发者,个人"   # 站点关键词
+  hideCredits = false           # 是否隐藏页脚版权信息
+  hideCopyright = false         # 是否隐藏页脚版权年份
+
+
+[[menu.main]]
+  name = "博客"
+  weight = 1
+  url = "/langchain"
+
+[[menu.main]]
+  name = "日常"
+  weight = 2
+  url = "/daily"
+
+[[menu.main]]
+  name = "兴趣"
+  weight = 3
+  url = "/hobby"
+
+[[menu.main]]
+  name = "工作"
+  weight = 4
+  url = "/work"
