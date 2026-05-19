@@ -247,7 +247,7 @@ if question := st.chat_input("请输入你的问题"):
 
 5、**控制 Token 消耗**：合理设置 chunk_size，使用 trim_messages 辅助函数管理历史长度。
 
-6、**关注官方 Cookbook**：https://python.langchain.com/ 上有大量最新示例。
+6、**关注官方 Cookbook**：<https://python.langchain.com/> 上有大量最新示例。
 
 
 ## 5. 结语
