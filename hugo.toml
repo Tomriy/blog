@@ -1,7 +1,7 @@
 baseURL = 'https://torimy.github.com/'
 locale = 'zh-CN"'
 title = 'Torimy的日常博客'
-theme = 'coder'
+theme = 'hugo-coder'
 enableEmoji = true
 
 # 分页设置
