@@ -1,4 +1,4 @@
-baseURL = 'https://torimy.github.com/'
+baseURL = 'https://torimy.github.io/'
 locale = 'zh-CN"'
 title = 'Torimy的日常博客'
 theme = 'coder'
