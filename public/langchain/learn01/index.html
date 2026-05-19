@@ -1,17 +1,34 @@
 <!DOCTYPE html>
-<html lang="en" dir="auto" data-theme="auto">
+<html lang="en">
 
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="noindex, nofollow">
-<title>LangChain 学习之旅：从核心概念到实战应用 | Torimy的日常博客</title>
-<meta name="keywords" content="LangChain, LLM, Python, AI, 教程">
-<meta name="description" content="引言
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <title>
+  LangChain 学习之旅：从核心概念到实战应用 · Torimy的日常博客
+</title>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+
+
+
+
+<meta name="description" content="
+  引言
+  
+    
+    Link to heading
+  
+
 大语言模型（LLM）的能力令人惊叹，但直接调用 API 往往难以构建复杂的、具备上下文感知和推理能力的应用。LangChain 应运而生，它是一套专门为简化 LLM 应用开发而设计的框架，让你能像搭积木一样组合出强大的智能体。
 本文将以新手友好的视角，带你一步步理解 LangChain 的核心模块，并通过一个完整的问答机器人示例，完成从理论到实践的跨越。
 
-1. 为什么是 LangChain？
+
+  1. 为什么是 LangChain？
+  
+    
+    Link to heading
+  
+
 
 标准化接口：统一了不同模型（OpenAI、Anthropic、本地模型）和向量数据库的调用方式。
 组件化设计：将应用拆分为提示、链、记忆、检索等模块，职责清晰，易于复用。
@@ -22,130 +39,160 @@
 注意：2026 年 LangChain 已进入成熟期，推荐使用 langchain-core 配合 langchain-openai 等包，体验最新的 LCEL（LangChain 表达式语言）特性。
 
 
-2. 核心组件速览
+
+  2. 核心组件速览
+  
+    
+    Link to heading
+  
+
 我们先用一张图理解 LangChain 的运转逻辑，然后逐一拆解。
 用户输入 → Prompt模板 → 语言模型 → 输出解析器 → 结果
 ↑ ↓
 Memory(记忆) Retriever(检索)
 ↑ ↓
 Agent(代理) ←→ Tools(工具)
-2.1 模型 I/O：与 LLM 对话的“翻译官”
-这是最基础的模块，包含三个要素：
 
-提示模板（Prompt Template）：将动态变量插入到预设的提示中。
-语言模型（Language Model）：统一调用各类 LLM。
-输出解析器（Output Parser）：将模型返回的非结构化文本变成程序可读的格式（如 JSON）。
-
-示例：">
-<meta name="author" content="Torimy">
-<link rel="canonical" href="http://localhost:1313/langchain/learn01/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.cd9298b33628769aa1bc1acebbbfd7aa11ce81dfe03484d479e1907760249a1d.css" integrity="sha256-zZKYszYodpqhvBrOu7/XqhHOgd/gNITUeeGQd2Akmh0=" rel="preload stylesheet" as="style">
-<link rel="icon" href="http://localhost:1313/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
-<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
-<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
-<meta name="theme-color" content="#2e2e33">
-<meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="http://localhost:1313/langchain/learn01/">
-<noscript>
-    <style>
-        #theme-toggle,
-        .top-link {
-            display: none;
-        }
-
-    </style>
-    <style>
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --theme: rgb(29, 30, 32);
-                --entry: rgb(46, 46, 51);
-                --primary: rgb(218, 218, 219);
-                --secondary: rgb(155, 156, 157);
-                --tertiary: rgb(65, 66, 68);
-                --content: rgb(196, 196, 197);
-                --code-block-bg: rgb(46, 46, 51);
-                --code-bg: rgb(55, 56, 62);
-                --border: rgb(51, 51, 51);
-                color-scheme: dark;
-            }
-
-            .list {
-                background: var(--theme);
-            }
-
-            .toc {
-                background: var(--entry);
-            }
-        }
-
-    </style>
-</noscript>
-<script>
-    if (localStorage.getItem("pref-theme") === "dark") {
-        document.querySelector("html").dataset.theme = 'dark';
-    } else if (localStorage.getItem("pref-theme") === "light") {
-       document.querySelector("html").dataset.theme = 'light';
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.querySelector("html").dataset.theme = 'dark';
-    } else {
-        document.querySelector("html").dataset.theme = 'light';
-    }
-
-</script>
-</head>
-<body id="top">
-    <header class="header">
-    <nav class="header-nav">
-        <div class="logo">
-            <a href="http://localhost:1313/" accesskey="h" title="Torimy的日常博客 (Alt + H)">Torimy的日常博客</a>
-            <div class="logo-switches">
-                <button id="theme-toggle" class="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
-                    <svg class="moon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                    <svg class="sun" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
-                </button>
-            </div>
-        </div>
-        <ul id="menu" class="menu">
-        </ul>
-    </nav>
-</header>
-<main class="main">
-
-<article class="post-single">
-  <header class="post-header">
+  2.1 模型 I/O：与 LLM 对话的“翻译官”
+  
     
-    <h1 class="post-title entry-hint-parent">
-      LangChain 学习之旅：从核心概念到实战应用
-    </h1>
-    <div class="post-meta">
+    Link to heading
+  
 
-<span title='2026-05-19 11:20:20 +0800 CST'>May 19, 2026</span>&nbsp;·&nbsp;<span>Torimy</span>
+这是最基础的模块，包含三个要素：">
+<meta name="keywords" content="">
 
+
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="LangChain 学习之旅：从核心概念到实战应用">
+  <meta name="twitter:description" content="引言 Link to heading 大语言模型（LLM）的能力令人惊叹，但直接调用 API 往往难以构建复杂的、具备上下文感知和推理能力的应用。LangChain 应运而生，它是一套专门为简化 LLM 应用开发而设计的框架，让你能像搭积木一样组合出强大的智能体。
+本文将以新手友好的视角，带你一步步理解 LangChain 的核心模块，并通过一个完整的问答机器人示例，完成从理论到实践的跨越。
+1. 为什么是 LangChain？ Link to heading 标准化接口：统一了不同模型（OpenAI、Anthropic、本地模型）和向量数据库的调用方式。 组件化设计：将应用拆分为提示、链、记忆、检索等模块，职责清晰，易于复用。 强大的编排能力：通过 Chain 和 Agent 实现多步推理、工具调用，而不仅仅是单轮对话。 生态丰富：官方和社区提供了大量 Tool、Loader、Retriever 集成，开箱即用。 注意：2026 年 LangChain 已进入成熟期，推荐使用 langchain-core 配合 langchain-openai 等包，体验最新的 LCEL（LangChain 表达式语言）特性。
+2. 核心组件速览 Link to heading 我们先用一张图理解 LangChain 的运转逻辑，然后逐一拆解。
+用户输入 → Prompt模板 → 语言模型 → 输出解析器 → 结果 ↑ ↓ Memory(记忆) Retriever(检索) ↑ ↓ Agent(代理) ←→ Tools(工具) 2.1 模型 I/O：与 LLM 对话的“翻译官” Link to heading 这是最基础的模块，包含三个要素：">
+
+<meta property="og:url" content="http://localhost:1313/langchain/learn01/">
+  <meta property="og:site_name" content="Torimy的日常博客">
+  <meta property="og:title" content="LangChain 学习之旅：从核心概念到实战应用">
+  <meta property="og:description" content="引言 Link to heading 大语言模型（LLM）的能力令人惊叹，但直接调用 API 往往难以构建复杂的、具备上下文感知和推理能力的应用。LangChain 应运而生，它是一套专门为简化 LLM 应用开发而设计的框架，让你能像搭积木一样组合出强大的智能体。
+本文将以新手友好的视角，带你一步步理解 LangChain 的核心模块，并通过一个完整的问答机器人示例，完成从理论到实践的跨越。
+1. 为什么是 LangChain？ Link to heading 标准化接口：统一了不同模型（OpenAI、Anthropic、本地模型）和向量数据库的调用方式。 组件化设计：将应用拆分为提示、链、记忆、检索等模块，职责清晰，易于复用。 强大的编排能力：通过 Chain 和 Agent 实现多步推理、工具调用，而不仅仅是单轮对话。 生态丰富：官方和社区提供了大量 Tool、Loader、Retriever 集成，开箱即用。 注意：2026 年 LangChain 已进入成熟期，推荐使用 langchain-core 配合 langchain-openai 等包，体验最新的 LCEL（LangChain 表达式语言）特性。
+2. 核心组件速览 Link to heading 我们先用一张图理解 LangChain 的运转逻辑，然后逐一拆解。
+用户输入 → Prompt模板 → 语言模型 → 输出解析器 → 结果 ↑ ↓ Memory(记忆) Retriever(检索) ↑ ↓ Agent(代理) ←→ Tools(工具) 2.1 模型 I/O：与 LLM 对话的“翻译官” Link to heading 这是最基础的模块，包含三个要素：">
+  <meta property="og:locale" content="en_zh">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="langchain">
+    <meta property="article:published_time" content="2026-05-19T11:20:20+08:00">
+    <meta property="article:modified_time" content="2026-05-19T11:20:20+08:00">
+    <meta property="article:tag" content="LangChain">
+    <meta property="article:tag" content="LLM">
+    <meta property="article:tag" content="Python">
+    <meta property="article:tag" content="AI">
+    <meta property="article:tag" content="教程">
+
+
+
+
+<link rel="canonical" href="http://localhost:1313/langchain/learn01/">
+
+
+<link rel="preload" href="/fonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
+
+
+  
+  
+  <link rel="stylesheet" href="/css/coder.css" media="screen">
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+<link rel="icon" type="image/svg+xml" href="/images/favicon.svg" sizes="any">
+<link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/images/favicon-16x16.png" sizes="16x16">
+
+<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+
+
+
+</head>
+
+
+
+
+<body class="preload-transitions colorscheme-light">
+  
+<div class="float-container">
+    <a id="dark-mode-toggle" class="colorscheme-toggle">
+        <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+    </a>
 </div>
-  </header> 
-  <div class="post-content md-content"><h2 id="引言">引言<a hidden class="anchor" aria-hidden="true" href="#引言">#</a></h2>
+
+
+  <main class="wrapper">
+    <nav class="navigation">
+  <section class="container">
+    
+    <a class="navigation-title" href="http://localhost:1313/">
+      Torimy的日常博客
+    </a>
+    
+    
+  </section>
+</nav>
+
+
+    <div class="content">
+      
+  <section class="container page">
+  <article>
+    <header>
+      <h1 class="title">
+        <a class="title-link" href="http://localhost:1313/langchain/learn01/">
+          LangChain 学习之旅：从核心概念到实战应用
+        </a>
+      </h1>
+    </header>
+
+    <h2 id="引言">
+  引言
+  <a class="heading-link" href="#%e5%bc%95%e8%a8%80">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
 <p>大语言模型（LLM）的能力令人惊叹，但直接调用 API 往往难以构建复杂的、具备上下文感知和推理能力的应用。<strong>LangChain</strong> 应运而生，它是一套专门为简化 LLM 应用开发而设计的框架，让你能像搭积木一样组合出强大的智能体。</p>
 <p>本文将以<strong>新手友好</strong>的视角，带你一步步理解 LangChain 的核心模块，并通过一个完整的问答机器人示例，完成从理论到实践的跨越。</p>
 <hr>
-<h2 id="1-为什么是-langchain">1. 为什么是 LangChain？<a hidden class="anchor" aria-hidden="true" href="#1-为什么是-langchain">#</a></h2>
+<h2 id="1-为什么是-langchain">
+  1. 为什么是 LangChain？
+  <a class="heading-link" href="#1-%e4%b8%ba%e4%bb%80%e4%b9%88%e6%98%af-langchain">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
 <ul>
 <li><strong>标准化接口</strong>：统一了不同模型（OpenAI、Anthropic、本地模型）和向量数据库的调用方式。</li>
 <li><strong>组件化设计</strong>：将应用拆分为提示、链、记忆、检索等模块，职责清晰，易于复用。</li>
@@ -156,14 +203,26 @@ Agent(代理) ←→ Tools(工具)
 <p>注意：2026 年 LangChain 已进入成熟期，推荐使用 <code>langchain-core</code> 配合 <code>langchain-openai</code> 等包，体验最新的 LCEL（LangChain 表达式语言）特性。</p>
 </blockquote>
 <hr>
-<h2 id="2-核心组件速览">2. 核心组件速览<a hidden class="anchor" aria-hidden="true" href="#2-核心组件速览">#</a></h2>
+<h2 id="2-核心组件速览">
+  2. 核心组件速览
+  <a class="heading-link" href="#2-%e6%a0%b8%e5%bf%83%e7%bb%84%e4%bb%b6%e9%80%9f%e8%a7%88">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
 <p>我们先用一张图理解 LangChain 的运转逻辑，然后逐一拆解。</p>
 <pre tabindex="0"><code>用户输入 → Prompt模板 → 语言模型 → 输出解析器 → 结果
 ↑ ↓
 Memory(记忆) Retriever(检索)
 ↑ ↓
 Agent(代理) ←→ Tools(工具)
-</code></pre><h3 id="21-模型-io与-llm-对话的翻译官">2.1 模型 I/O：与 LLM 对话的“翻译官”<a hidden class="anchor" aria-hidden="true" href="#21-模型-io与-llm-对话的翻译官">#</a></h3>
+</code></pre><h3 id="21-模型-io与-llm-对话的翻译官">
+  2.1 模型 I/O：与 LLM 对话的“翻译官”
+  <a class="heading-link" href="#21-%e6%a8%a1%e5%9e%8b-io%e4%b8%8e-llm-%e5%af%b9%e8%af%9d%e7%9a%84%e7%bf%bb%e8%af%91%e5%ae%98">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
 <p>这是最基础的模块，包含三个要素：</p>
 <ol>
 <li><strong>提示模板（Prompt Template）</strong>：将动态变量插入到预设的提示中。</li>
@@ -190,7 +249,13 @@ Agent(代理) ←→ Tools(工具)
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 将它们串联</span>
 </span></span><span style="display:flex;"><span>chain <span style="color:#f92672">=</span> prompt <span style="color:#f92672">|</span> model <span style="color:#f92672">|</span> parser
 </span></span><span style="display:flex;"><span>print(chain<span style="color:#f92672">.</span>invoke({<span style="color:#e6db74">&#34;topic&#34;</span>: <span style="color:#e6db74">&#34;程序员&#34;</span>}))
-</span></span></code></pre></div><h3 id="22-检索增强生成rag让-llm-拥有外脑">2.2 检索增强生成（RAG）：让 LLM 拥有“外脑”<a hidden class="anchor" aria-hidden="true" href="#22-检索增强生成rag让-llm-拥有外脑">#</a></h3>
+</span></span></code></pre></div><h3 id="22-检索增强生成rag让-llm-拥有外脑">
+  2.2 检索增强生成（RAG）：让 LLM 拥有“外脑”
+  <a class="heading-link" href="#22-%e6%a3%80%e7%b4%a2%e5%a2%9e%e5%bc%ba%e7%94%9f%e6%88%90rag%e8%ae%a9-llm-%e6%8b%a5%e6%9c%89%e5%a4%96%e8%84%91">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
 <p>LLM 的训练数据是静态的，想让模型基于最新文档或私有知识回答，就需要 RAG 流水线。</p>
 <p>典型流程：加载文档 → 文本切割 → 向量化 → 存入向量数据库 → 检索相关内容 → 注入提示。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> langchain_community.document_loaders <span style="color:#f92672">import</span> TextLoader
@@ -226,7 +291,13 @@ Agent(代理) ←→ Tools(工具)
 </span></span><span style="display:flex;"><span>)
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>answer <span style="color:#f92672">=</span> rag_chain<span style="color:#f92672">.</span>invoke(<span style="color:#e6db74">&#34;What did the author say about...&#34;</span>)
-</span></span></code></pre></div><h3 id="23-链与记忆不止于单次对话">2.3 链与记忆：不止于单次对话<a hidden class="anchor" aria-hidden="true" href="#23-链与记忆不止于单次对话">#</a></h3>
+</span></span></code></pre></div><h3 id="23-链与记忆不止于单次对话">
+  2.3 链与记忆：不止于单次对话
+  <a class="heading-link" href="#23-%e9%93%be%e4%b8%8e%e8%ae%b0%e5%bf%86%e4%b8%8d%e6%ad%a2%e4%ba%8e%e5%8d%95%e6%ac%a1%e5%af%b9%e8%af%9d">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
 <p><strong>Chain</strong> 将多个步骤串联成工作流。早期有 <code>LLMChain</code>，现在更推荐使用 <strong>LCEL</strong> (| 管道) 构建，它天然支持流式、异步和并行。</p>
 <p><strong>Memory</strong> 负责在多次交互中保持状态。现代 LangChain 应用中，我们通常使用 <code>RunnableWithMessageHistory</code> 包装链，把历史消息存入外部存储</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> langchain_community.chat_message_histories <span style="color:#f92672">import</span> ChatMessageHistory
@@ -256,7 +327,13 @@ Agent(代理) ←→ Tools(工具)
 </span></span><span style="display:flex;"><span>    {<span style="color:#e6db74">&#34;question&#34;</span>: <span style="color:#e6db74">&#34;我叫什么名字？&#34;</span>},
 </span></span><span style="display:flex;"><span>    config<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;configurable&#34;</span>: {<span style="color:#e6db74">&#34;session_id&#34;</span>: <span style="color:#e6db74">&#34;user123&#34;</span>}}
 </span></span><span style="display:flex;"><span>)
-</span></span></code></pre></div><h3 id="24-代理agent与工具让模型学会使用手脚">2.4 代理（Agent）与工具：让模型学会使用“手脚”<a hidden class="anchor" aria-hidden="true" href="#24-代理agent与工具让模型学会使用手脚">#</a></h3>
+</span></span></code></pre></div><h3 id="24-代理agent与工具让模型学会使用手脚">
+  2.4 代理（Agent）与工具：让模型学会使用“手脚”
+  <a class="heading-link" href="#24-%e4%bb%a3%e7%90%86agent%e4%b8%8e%e5%b7%a5%e5%85%b7%e8%ae%a9%e6%a8%a1%e5%9e%8b%e5%ad%a6%e4%bc%9a%e4%bd%bf%e7%94%a8%e6%89%8b%e8%84%9a">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h3>
 <p>当你需要模型<strong>自主决策调用何种工具</strong>（搜索、计算器、查询数据库）时，Agent 就登场了。</p>
 <p><strong>Tools</strong>：封装了具体功能的接口（如 <code>tool</code> 装饰器）。</p>
 <p><strong>Agent</strong>：根据 LLM 的推理，选择工具并观察结果，直到得出最终答案。</p>
@@ -268,7 +345,13 @@ Agent(代理) ←→ Tools(工具)
 </span></span><span style="display:flex;"><span>agent <span style="color:#f92672">=</span> create_react_agent(model, tools)
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>result <span style="color:#f92672">=</span> agent<span style="color:#f92672">.</span>invoke({<span style="color:#e6db74">&#34;messages&#34;</span>: [(<span style="color:#e6db74">&#34;user&#34;</span>, <span style="color:#e6db74">&#34;2026年温网男单冠军是谁？&#34;</span>)]})
-</span></span></code></pre></div><h2 id="3-实战构建一个可对话的知识库助手">3. 实战：构建一个可对话的知识库助手<a hidden class="anchor" aria-hidden="true" href="#3-实战构建一个可对话的知识库助手">#</a></h2>
+</span></span></code></pre></div><h2 id="3-实战构建一个可对话的知识库助手">
+  3. 实战：构建一个可对话的知识库助手
+  <a class="heading-link" href="#3-%e5%ae%9e%e6%88%98%e6%9e%84%e5%bb%ba%e4%b8%80%e4%b8%aa%e5%8f%af%e5%af%b9%e8%af%9d%e7%9a%84%e7%9f%a5%e8%af%86%e5%ba%93%e5%8a%a9%e6%89%8b">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
 <p>结合 RAG、记忆和 Streaming，打造一个完整的问答应用。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> streamlit <span style="color:#66d9ef">as</span> st
 </span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> langchain_openai <span style="color:#f92672">import</span> ChatOpenAI, OpenAIEmbeddings
@@ -329,110 +412,97 @@ Agent(代理) ←→ Tools(工具)
 </span></span><span style="display:flex;"><span>            chain_with_history<span style="color:#f92672">.</span>stream({<span style="color:#e6db74">&#34;question&#34;</span>: question}, config)
 </span></span><span style="display:flex;"><span>        )
 </span></span></code></pre></div><p>这短短几十行代码就实现了一个拥有长记忆、基于私有知识、且流式输出的对话界面。</p>
-<h2 id="4-学习建议与最佳实践">4. 学习建议与最佳实践<a hidden class="anchor" aria-hidden="true" href="#4-学习建议与最佳实践">#</a></h2>
+<h2 id="4-学习建议与最佳实践">
+  4. 学习建议与最佳实践
+  <a class="heading-link" href="#4-%e5%ad%a6%e4%b9%a0%e5%bb%ba%e8%ae%ae%e4%b8%8e%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
 <p>1、<strong>从 LCEL 入手</strong>：抛弃旧的 LLMChain，| 管道语法可读性强，且便于调试和组合。</p>
 <p>2、<strong>善用 LangSmith</strong>：官方提供的调试平台，可以可视化每一步的输入输出，迅速定位问题。</p>
 <p>3、<strong>理解 Runnable 协议</strong>：所有组件都是 Runnable，支持 invoke、stream、batch，掌握它就能轻松切换同步/异步。</p>
 <p>4、<strong>拆分独立组件</strong>：不要写一个巨大的链，而是将检索、格式化、回答拆成独立 Runnable，便于测试和复用。</p>
 <p>5、<strong>控制 Token 消耗</strong>：合理设置 chunk_size，使用 trim_messages 辅助函数管理历史长度。</p>
 <p>6、<strong>关注官方 Cookbook</strong>：https://python.langchain.com/ 上有大量最新示例。</p>
-<h2 id="5-结语">5. 结语<a hidden class="anchor" aria-hidden="true" href="#5-结语">#</a></h2>
+<h2 id="5-结语">
+  5. 结语
+  <a class="heading-link" href="#5-%e7%bb%93%e8%af%ad">
+    <i class="fa-solid fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
 <p>LangChain 为 LLM 应用开发提供了一套强大的抽象，它的真正价值在于让你<strong>专注于业务逻辑而非底层胶水代码</strong>。记住：框架只是工具，关键在于你对问题域的拆解和提示词的设计。</p>
 <p>建议你今天就从一个小项目开始——也许是自己的个人知识库、也许是自动化邮件助手——亲自动手感受 LangChain 的威力。</p>
 
+  </article>
+</section>
 
-  </div>
+  
 
-  <footer class="post-footer">
-    <ul class="post-tags">
-      <li><a href="http://localhost:1313/tags/langchain/">LangChain</a></li>
-      <li><a href="http://localhost:1313/tags/llm/">LLM</a></li>
-      <li><a href="http://localhost:1313/tags/python/">Python</a></li>
-      <li><a href="http://localhost:1313/tags/ai/">AI</a></li>
-      <li><a href="http://localhost:1313/tags/%E6%95%99%E7%A8%8B/">教程</a></li>
-    </ul>
-  </footer>
-</article>
-    </main>
-    
-<footer class="footer">
-        <span>&copy; 2026 <a href="http://localhost:1313/">Torimy的日常博客</a></span> · 
+    </div>
 
+    <footer class="footer">
+  <section class="container">
+    ©
     
+    2026
     
-    <span>
-        Powered by
-        <a href="https://gohugo.io/?utm_source=papermod" rel="noopener" target="_blank">Hugo</a> &
-        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
-    </span>
+    ·
+    
+    Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/" target="_blank" rel="noopener">Coder</a>.
+    
+  </section>
 </footer>
-<a href="#top" id="top-link" class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey="g">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-        stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up">
-        <polyline points="17 11 12 6 7 11"></polyline>
-        <polyline points="17 18 12 13 7 18"></polyline>
-    </svg>
-</a>
 
-<script>
-    let menu = document.getElementById('menu');
-    if (menu) {
-        
-        const scrollPosition = localStorage.getItem("menu-scroll-position");
-        if (scrollPosition) {
-            menu.scrollLeft = parseInt(scrollPosition, 10);
-        }
-        
-        menu.onscroll = function () {
-            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
-        }
-    }
+  </main>
 
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener("click", function (e) {
-            e.preventDefault();
-            var id = this.getAttribute("href").substr(1);
-            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
-                    behavior: "smooth"
-                });
-            } else {
-                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
-            }
-            if (id === "top") {
-                history.replaceState(null, null, " ");
-            } else {
-                history.pushState(null, null, `#${id}`);
-            }
-        });
-    });
+  
 
-</script>
-<script>
-    var toplink = document.getElementById("top-link");
-    window.onscroll = function () {
-        const scrollThreshold = window.innerHeight;
-        if (document.body.scrollTop > scrollThreshold || document.documentElement.scrollTop > scrollThreshold) {
-            toplink.classList.remove("hidden");
-        } else {
-            toplink.classList.add("hidden");
-        }
-    };
+  
+  
+  <script src="/js/coder.js"></script>
+  
 
-</script>
-<script>
-    document.getElementById("theme-toggle").addEventListener("click", () => {
-        const html = document.querySelector("html");
-        if (html.dataset.theme === "dark") {
-            html.dataset.theme = 'light';
-            localStorage.setItem("pref-theme", 'light');
-        } else {
-            html.dataset.theme = 'dark';
-            localStorage.setItem("pref-theme", 'dark');
-        }
-    })
+  
 
-</script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
 </body>
 
 </html>
