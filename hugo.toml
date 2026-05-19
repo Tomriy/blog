@@ -25,7 +25,7 @@ pygmentsCodeFencesGuessSyntax = true
 [[menu.main]]
   name = "博客"
   weight = 1
-  url = "/langchain"
+  url = "/learn"
 
 [[menu.main]]
   name = "日常"
